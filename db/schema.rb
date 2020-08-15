@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_15_081155) do
+ActiveRecord::Schema.define(version: 2020_08_15_104429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "articles", force: :cascade do |t|
+    t.bigint "story_id", null: false
+    t.string "name", null: false
+    t.string "kind", default: "standard_text", null: false
+    t.text "text", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["kind"], name: "index_articles_on_kind"
+    t.index ["name"], name: "index_articles_on_name"
+    t.index ["story_id"], name: "index_articles_on_story_id"
+  end
 
   create_table "stories", force: :cascade do |t|
     t.string "name", null: false
@@ -22,4 +34,5 @@ ActiveRecord::Schema.define(version: 2020_08_15_081155) do
     t.index ["name"], name: "index_stories_on_name", unique: true
   end
 
+  add_foreign_key "articles", "stories"
 end

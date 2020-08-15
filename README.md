@@ -30,6 +30,12 @@ Create database:
 rails db:create db:schema:load
 ```
 
+Seed database with test data:
+
+```bash
+rake db:seed
+```
+
 Start your server:
 
 ```bash

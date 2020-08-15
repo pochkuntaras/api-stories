@@ -9,7 +9,9 @@ gem 'puma', '~> 4.1'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'rack-cors'
 gem 'responders'
+gem 'database_cleaner'
 gem 'active_model_serializers'
+gem 'enumerize'
 gem 'fuubar'
 
 group :development, :test do
@@ -26,7 +28,7 @@ group :development do
 end
 
 group :test do
-  gem 'shoulda-matchers', '~> 3.1'
+  gem 'shoulda-matchers', '4.0.1'
   gem 'rails-controller-testing'
   gem 'json_spec'
 end

@@ -16,6 +16,10 @@ require 'rails_helper'
 RSpec.describe Story, type: :model do
   subject { create :story }
 
+  describe 'Associations.' do
+    it { should have_many(:articles).dependent(:destroy) }
+  end
+
   describe 'Validations.' do
     it { should validate_presence_of :name }
 
