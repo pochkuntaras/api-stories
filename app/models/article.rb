@@ -23,6 +23,8 @@
 class Article < ApplicationRecord
   extend Enumerize
 
+  include Filterable
+
   KINDS = %i[standard_text photo_album interview sentence event].freeze
 
   belongs_to :story
@@ -30,4 +32,9 @@ class Article < ApplicationRecord
   validates :story_id, :name, :text, presence: true
 
   enumerize :kind, in: KINDS, predicates: true, default: :standard_text
+
+  scope :story, -> (id)   { where(story_id: id) }
+  scope :named, -> (name) { where('LOWER("articles"."name") LIKE LOWER(?)', "%#{name}%") }
+  scope :text,  -> (text) { where('LOWER("articles"."text") LIKE LOWER(?)', "%#{text}%") }
+  scope :kind,  -> (kind) { where(kind: kind) }
 end

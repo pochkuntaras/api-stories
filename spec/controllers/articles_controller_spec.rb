@@ -2,8 +2,22 @@ require 'rails_helper'
 
 RSpec.describe ArticlesController, type: :controller do
   describe 'GET #index' do
-    let(:first_article)  { create :article, name: 'The first article.' }
-    let(:second_article) { create :article, name: 'The second article.' }
+    let(:first_story) { create :story }
+    let(:second_story) { create :story }
+
+    let(:first_article)  do
+      create :article, :standard_text,
+             name:     'The first article.',
+             story:    first_story,
+             text:     "The most largest continent is Eurasia."
+    end
+
+    let(:second_article) do
+      create :article, :interview,
+             name:     'The second article.',
+             story:    second_story,
+             text:     "Neil is river."
+    end
 
     let!(:articles) { [first_article, second_article] }
 
@@ -16,6 +30,56 @@ RSpec.describe ArticlesController, type: :controller do
       it { expect(assigns(:articles)).to match_array(articles) }
       it { expect(response.body).to have_json_size(2).at_path('articles') }
       it { expect(response.body).to be_json_eql(articles_json).at_path('articles') }
+    end
+
+    describe 'Filtering.' do
+      context 'By story.' do
+        it "should return articles includes story id of first story" do
+          do_request story: first_story.id, text: ''
+          expect(assigns(:articles)).to match_array(first_article)
+        end
+
+        it "should return articles includes story id of second story" do
+          do_request story: second_story.id, text: ''
+          expect(assigns(:articles)).to match_array(second_article)
+        end
+      end
+
+      context 'By name.' do
+        it "should return articles includes name 'first'" do
+          do_request named: 'first'
+          expect(assigns(:articles)).to match_array(first_article)
+        end
+
+        it "should return articles includes name 'SECOND'" do
+          do_request named: 'SECOND'
+          expect(assigns(:articles)).to match_array(second_article)
+        end
+      end
+
+      context 'By text.' do
+        it "should return articles includes text 'largest'" do
+          do_request text: 'largest'
+          expect(assigns(:articles)).to match_array(first_article)
+        end
+
+        it "should return articles includes text 'Neil'" do
+          do_request text: 'Neil'
+          expect(assigns(:articles)).to match_array(second_article)
+        end
+      end
+
+      context 'By kind.' do
+        it "should return articles includes kind 'standard_text'" do
+          do_request kind: 'standard_text'
+          expect(assigns(:articles)).to match_array(first_article)
+        end
+
+        it "should return articles includes text 'Neil'" do
+          do_request kind: 'interview'
+          expect(assigns(:articles)).to match_array(second_article)
+        end
+      end
     end
 
     def do_request(params = {})
