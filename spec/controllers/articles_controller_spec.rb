@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe ArticlesController, type: :controller do
   describe 'GET #index' do
-    let(:first_story) { create :story }
-    let(:second_story) { create :story }
+    let(:first_story)  { create :story, name: "The true story." }
+    let(:second_story) { create :story, name: "The my story." }
 
     let(:first_article)  do
       create :article, :standard_text,
@@ -30,6 +30,75 @@ RSpec.describe ArticlesController, type: :controller do
       it { expect(assigns(:articles)).to match_array(articles) }
       it { expect(response.body).to have_json_size(2).at_path('articles') }
       it { expect(response.body).to be_json_eql(articles_json).at_path('articles') }
+    end
+
+    describe 'Sorting.' do
+      let(:first_article_json)  { first_article.to_json(include: :story, except: :story_id) }
+      let(:second_article_json) { second_article.to_json(include: :story, except: :story_id) }
+
+      context 'By story.' do
+        it "should return articles sorted by story (asc)" do
+          do_request sort: 'story', direction: 'asc'
+
+          expect(response.body).to be_json_eql(first_article_json).at_path('articles/1')
+          expect(response.body).to be_json_eql(second_article_json).at_path('articles/0')
+        end
+
+        it "should return articles sorted by story (desc)" do
+          do_request sort: 'story', direction: 'desc'
+
+          expect(response.body).to be_json_eql(first_article_json).at_path('articles/0')
+          expect(response.body).to be_json_eql(second_article_json).at_path('articles/1')
+        end
+      end
+
+      context 'By ID.' do
+        it "should return articles sorted by id (asc)" do
+          do_request sort: 'id', direction: 'asc'
+
+          expect(response.body).to be_json_eql(first_article_json).at_path('articles/0')
+          expect(response.body).to be_json_eql(second_article_json).at_path('articles/1')
+        end
+
+        it "should return articles sorted by id (desc)" do
+          do_request sort: 'id', direction: 'desc'
+
+          expect(response.body).to be_json_eql(first_article_json).at_path('articles/1')
+          expect(response.body).to be_json_eql(second_article_json).at_path('articles/0')
+        end
+      end
+
+      context 'By name.' do
+        it "should return articles sorted by name (asc)" do
+          do_request sort: 'name', direction: 'asc'
+
+          expect(response.body).to be_json_eql(first_article_json).at_path('articles/0')
+          expect(response.body).to be_json_eql(second_article_json).at_path('articles/1')
+        end
+
+        it "should return articles sorted by name (desc)" do
+          do_request sort: 'name', direction: 'desc'
+
+          expect(response.body).to be_json_eql(first_article_json).at_path('articles/1')
+          expect(response.body).to be_json_eql(second_article_json).at_path('articles/0')
+        end
+      end
+
+      context 'By kind.' do
+        it "should return articles sorted by kind (asc)" do
+          do_request sort: 'kind', direction: 'asc'
+
+          expect(response.body).to be_json_eql(first_article_json).at_path('articles/1')
+          expect(response.body).to be_json_eql(second_article_json).at_path('articles/0')
+        end
+
+        it "should return articles sorted by kind (desc)" do
+          do_request sort: 'kind', direction: 'desc'
+
+          expect(response.body).to be_json_eql(first_article_json).at_path('articles/0')
+          expect(response.body).to be_json_eql(second_article_json).at_path('articles/1')
+        end
+      end
     end
 
     describe 'Filtering.' do

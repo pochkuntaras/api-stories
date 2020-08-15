@@ -1,4 +1,6 @@
 class ArticlesController < ApplicationController
+  include Sortable
+
   before_action :set_articles, only: %i[index]
   before_action :set_article, only: %i[show update destroy]
   before_action :build_article, only: %i[create]
@@ -35,7 +37,8 @@ class ArticlesController < ApplicationController
   end
 
   def set_articles
-    @articles = Article.filter_by(filter_params)
+    @articles = Article.includes(:story).filter_by(filter_params)
+    @articles = @articles.reorder(sort) if params[:sort].present?
   end
 
   def set_article
@@ -48,5 +51,14 @@ class ArticlesController < ApplicationController
 
   def article_params
     params.require(:article).permit(:story_id, :name, :text, :kind)
+  end
+
+  def custom_sort_columns
+    {
+      id:    '"articles"."id"',
+      name:  '"articles"."name"',
+      kind:  '"articles"."kind"',
+      story: '"stories"."name"'
+    }
   end
 end
