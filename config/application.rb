@@ -20,5 +20,15 @@ module ApiStories
     config.load_defaults 6.0
 
     config.api_only = true
+
+    config.generators do |g|
+      g.test_framework :rspec, fixtures: true, view_specs: false,
+                       helper_specs: false, routing_specs: false,
+                       request_specs: false, controller_specs: true
+
+      g.fixture_replacement :factory_bot, dir: 'spec/factories'
+    end
+
+    config.app_generators.scaffold_controller :responders_controller
   end
 end
