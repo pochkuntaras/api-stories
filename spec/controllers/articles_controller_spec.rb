@@ -116,12 +116,12 @@ RSpec.describe ArticlesController, type: :controller do
 
       context 'By name.' do
         it "should return articles includes name 'first'" do
-          do_request named: 'first'
+          do_request named: 'first', story: ''
           expect(assigns(:articles)).to match_array(first_article)
         end
 
         it "should return articles includes name 'SECOND'" do
-          do_request named: 'SECOND'
+          do_request named: 'SECOND', story: ''
           expect(assigns(:articles)).to match_array(second_article)
         end
       end
