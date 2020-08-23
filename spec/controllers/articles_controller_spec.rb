@@ -104,12 +104,12 @@ RSpec.describe ArticlesController, type: :controller do
     describe 'Filtering.' do
       context 'By story.' do
         it "should return articles includes story id of first story" do
-          do_request story: first_story.id, text: ''
+          do_request story: first_story.name, text: ''
           expect(assigns(:articles)).to match_array(first_article)
         end
 
         it "should return articles includes story id of second story" do
-          do_request story: second_story.id, text: ''
+          do_request story: second_story.name, text: ''
           expect(assigns(:articles)).to match_array(second_article)
         end
       end

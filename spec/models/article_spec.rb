@@ -51,8 +51,8 @@ RSpec.describe Article, type: :model do
       let(:thirty_article) { create :article, name: 'The thirty article.' }
 
       it { expect(Article.story(nil)).to match_array([]) }
-      it { expect(Article.story(first_story.id)).to match_array(first_article) }
-      it { expect(Article.story(second_story.id)).to match_array(second_article) }
+      it { expect(Article.story(first_story.name)).to match_array(first_article) }
+      it { expect(Article.story(second_story.name)).to match_array(second_article) }
     end
 
     context '#named' do

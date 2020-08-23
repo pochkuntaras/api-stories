@@ -33,7 +33,7 @@ class Article < ApplicationRecord
 
   enumerize :kind, in: KINDS, predicates: true, default: :standard_text
 
-  scope :story, -> (id)   { where(story_id: id) }
+  scope :story, -> (name) { where(story_id: Story.select(:id).where('LOWER("stories"."name") LIKE LOWER(?)', "%#{name}%")) }
   scope :named, -> (name) { where('LOWER("articles"."name") LIKE LOWER(?)', "%#{name}%") }
   scope :text,  -> (text) { where('LOWER("articles"."text") LIKE LOWER(?)', "%#{text}%") }
   scope :kind,  -> (kind) { where(kind: kind) }
