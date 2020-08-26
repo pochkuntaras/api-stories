@@ -35,7 +35,7 @@ class ArticlesController < ApplicationController
   private
 
   def filter_params
-    params.slice(:story, :named, :text, :kind)
+    params.slice(:story, :named, :text, :kind, :group_by_field)
   end
 
   def set_articles
@@ -57,10 +57,12 @@ class ArticlesController < ApplicationController
 
   def custom_sort_columns
     {
-      id:    '"articles"."id"',
-      name:  '"articles"."name"',
-      kind:  '"articles"."kind"',
-      story: '"stories"."name"'
+      id:         '"articles"."id"',
+      name:       '"articles"."name"',
+      kind:       '"articles"."kind"',
+      story:      '"stories"."name"',
+      created_at: '"articles"."created_at"',
+      updated_at: '"articles"."updated_at"'
     }
   end
 

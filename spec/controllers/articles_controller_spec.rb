@@ -149,6 +149,18 @@ RSpec.describe ArticlesController, type: :controller do
           expect(assigns(:articles)).to match_array(second_article)
         end
       end
+
+      context 'Group by field.' do
+        it "should return articles group by story id" do
+          do_request group_by_field: 'story_id'
+          expect(assigns(:articles)).to eq([first_article, second_article])
+        end
+
+        it "should return articles group by name" do
+          do_request group_by_field: 'name'
+          expect(assigns(:articles)).to eq([first_article, second_article])
+        end
+      end
     end
 
     def do_request(params = {})

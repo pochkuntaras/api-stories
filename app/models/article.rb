@@ -37,4 +37,9 @@ class Article < ApplicationRecord
   scope :named, -> (name) { where('LOWER("articles"."name") LIKE LOWER(?)', "%#{name}%") }
   scope :text,  -> (text) { where('LOWER("articles"."text") LIKE LOWER(?)', "%#{text}%") }
   scope :kind,  -> (kind) { where(kind: kind) }
+
+  def self.group_by_field(field = 'id')
+    field_sym = field.downcase.to_sym
+    where(field_sym => Article.select(field_sym).group(field_sym)).reorder(field_sym)
+  end
 end

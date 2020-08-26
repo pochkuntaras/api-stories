@@ -81,5 +81,18 @@ RSpec.describe Article, type: :model do
       it { expect(Article.kind("standard_text")).to match_array(first_article) }
       it { expect(Article.kind("interview")).to match_array(second_article) }
     end
+
+    context '#group_by_field' do
+      let(:first_story)  { create :story, name: '1 story' }
+      let(:second_story) { create :story, name: '2 story' }
+
+      let(:article_1) { create :article, name: 'The 1 article.', story: first_story  }
+      let(:article_2) { create :article, name: 'The 2 article.', story: second_story }
+      let(:article_3) { create :article, name: 'The 3 article.', story: first_story }
+      let(:article_4) { create :article, name: 'The 1 article.', story: second_story }
+
+      it { expect(Article.group_by_field('story_id')).to eq([article_1, article_3, article_2, article_4]) }
+      it { expect(Article.group_by_field('name')).to eq([article_1, article_4, article_2, article_3]) }
+    end
   end
 end
