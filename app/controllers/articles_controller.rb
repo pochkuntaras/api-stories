@@ -10,7 +10,7 @@ class ArticlesController < ApplicationController
   respond_to :json
 
   def index
-    respond_with @articles
+    respond_with @articles, meta: Article.where(id: @articles.select(:id)).meta
   end
 
   def show

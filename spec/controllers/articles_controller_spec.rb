@@ -30,6 +30,7 @@ RSpec.describe ArticlesController, type: :controller do
       it { expect(assigns(:articles)).to match_array(articles) }
       it { expect(response.body).to have_json_size(2).at_path('articles') }
       it { expect(response.body).to be_json_eql(articles_json).at_path('articles') }
+      it { expect(response.body).to be_json_eql(Article.meta.to_json).at_path('meta') }
     end
 
     describe 'Sorting.' do
