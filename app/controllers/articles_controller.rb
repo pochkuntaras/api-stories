@@ -5,7 +5,7 @@ class ArticlesController < ApplicationController
   before_action :set_article, only: %i[show update destroy]
   before_action :build_article, only: %i[create]
 
-  after_action :publish_article, only: %i[update]
+  after_action :publish_article, only: %i[update destroy]
 
   respond_to :json
 
@@ -69,6 +69,6 @@ class ArticlesController < ApplicationController
   def publish_article
     return if @article.errors.any?
     serialized_article = ArticleSerializer.new(@article).as_json
-    ActionCable.server.broadcast('articles', article: serialized_article)
+    ActionCable.server.broadcast('articles', article: serialized_article, destroy: !@article.persisted?)
   end
 end
