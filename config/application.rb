@@ -21,6 +21,8 @@ module ApiStories
 
     config.api_only = true
 
+    config.action_cable.disable_request_forgery_protection = true
+
     config.generators do |g|
       g.test_framework :rspec, fixtures: true, view_specs: false,
                        helper_specs: false, routing_specs: false,

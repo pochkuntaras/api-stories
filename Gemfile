@@ -14,6 +14,7 @@ gem 'active_model_serializers'
 gem 'enumerize'
 gem 'fuubar'
 gem 'factory_bot_rails'
+gem 'redis', '4.1.4'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
